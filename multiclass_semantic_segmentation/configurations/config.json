@@ -1,0 +1,17 @@
+{
+  "images_path": "..\\Data\\sandstone_data_for_ML\\full_labels_for_deep_learning\\128_patches\\images",
+  "labels_path": "..\\Data\\sandstone_data_for_ML\\full_labels_for_deep_learning\\128_patches\\labels",
+  "image_width": 128,
+  "image_height": 128,
+  "image_channel": 1,
+  "n_classes": 4,
+  "epochs": 3,
+  "batch_size": 8,
+  "shuffle": false,
+  "transfer_learning": false,
+  "transfer_network": "resnet50",
+  "test_size": 0.1,
+  "optimizer": "adam",
+  "loss_function": "categorical_crossentropy",
+  "metrics": ["accuracy"]
+}

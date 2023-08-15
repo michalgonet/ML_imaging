@@ -8,11 +8,11 @@ def avg_weights(weights):
     return average_weights
 
 
-def multi_unet_model(n_classes, img_height, img_width, img_channel):
+def multi_unet_model(n_classes: int, input_sz: tuple[int, int, int]) -> tf.keras.Model:
     base_model = tf.keras.applications.VGG16(include_top=False, weights='imagenet')
 
     base_model_config = base_model.get_config()
-    base_model_config["layers"][0]["config"]["batch_input_shape"] = (None, img_height, img_width, img_channel)
+    base_model_config["layers"][0]["config"]["batch_input_shape"] = (None, input_sz[0], input_sz[1], input_sz[2])
 
     updated_model = tf.keras.Model.from_config(base_model_config)
     updated_model_config = updated_model.get_config()
@@ -20,6 +20,8 @@ def multi_unet_model(n_classes, img_height, img_width, img_channel):
                                  range(len(updated_model_config['layers']))]
 
     first_conv_name = updated_model_layers_name[1]
+    print(first_conv_name)
+
     for layer in base_model.layers:
         if layer.name in updated_model_layers_name:
             if layer.get_weights():

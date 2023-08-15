@@ -1,12 +1,10 @@
 from keras.models import Model
-from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, \
-    Dropout, Lambda
+from keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, Dropout
 
 
-################################################################
-def multi_unet_model(n_classes, img_height, img_width, img_channel):
+def multi_unet_model(n_classes, input_sz: tuple[int, int, int]):
     # Build the model
-    inputs = Input((img_height, img_width, img_channel))
+    inputs = Input(input_sz)
     # s = Lambda(lambda x: x / 255)(inputs)   #No need for this if we normalize our inputs beforehand
     s = inputs
 
