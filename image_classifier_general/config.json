@@ -1,0 +1,20 @@
+{
+  "image_size": 256,
+  "n_channels": 3,
+  "batch_size": 32,
+  "epochs": 150,
+  "train_split": 0.7,
+  "val_split": 0.15,
+  "n_classes": 6,
+  "shuffle": true,
+  "shuffle_size": 1000,
+  "seed": 10,
+  "resizing": true,
+  "rescaling": true,
+  "random_flip": true,
+  "random_rotation": 0.2,
+  "optimizer": "adam",
+  "learning_rate": 0.001,
+  "loss_function": "sparse_categorical_crossentropy",
+  "metrics": ["accuracy"]
+}
