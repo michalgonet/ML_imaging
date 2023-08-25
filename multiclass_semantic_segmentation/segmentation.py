@@ -18,6 +18,7 @@ pixel_weights = get_pixel_weights(train_mask_1d_encoded)
 input_shape = (X_train.shape[1], X_train.shape[2], X_train.shape[3])
 
 # Model definition
+# input_shape = (128, 128, 1)
 model = get_model(config, input_shape)
 model.compile(
     optimizer=config.optimizer,
@@ -25,12 +26,33 @@ model.compile(
     metrics=config.metrics)
 
 # Training
-history = model.fit(X_train, y_train_cat,
-                    batch_size=config.batch_size,
-                    verbose=1,
-                    epochs=config.epochs,
-                    validation_data=(X_test, y_test_cat),
-                    shuffle=config.shuffle)
+img_path = 'C:/Michal/Programming/Repositories_MG/ML_imaging/Data/sandstone_data_for_ML/full_labels_for_deep_learning/128_patches/images'
+mask_path = 'C:/Michal/Programming/Repositories_MG/ML_imaging/Data/sandstone_data_for_ML/full_labels_for_deep_learning/128_patches/labels'
+batch_size = 4
+img_list = list(Path(img_path).rglob('*.tif'))
+mask_path = list(Path(mask_path).rglob('*.tif'))
+
+steps_per_epoch = len(img_list) // batch_size
+
+from utils import imageLoader
+
+img_generator = imageLoader(img_list, mask_path, batch_size)
+
+# history = model.fit(X_train, y_train_cat,
+#                     batch_size=config.batch_size,
+#                     verbose=1,
+#                     epochs=config.epochs,
+#                     validation_data=(X_test, y_test_cat),
+#                     shuffle=config.shuffle)
+
+history = model.fit(
+    img_generator,
+    steps_per_epoch=steps_per_epoch,
+    epochs=50,
+    verbose=1,
+    # validation_data=train_gen,
+    # validation_steps=steps_per_epoch,
+)
 # Save Model
 model.save(
     f'models/N_classes_{config.n_classes}_'

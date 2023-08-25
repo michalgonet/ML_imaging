@@ -8,6 +8,7 @@ from pathlib import Path
 
 from sklearn import preprocessing
 from sklearn.utils import class_weight
+from PIL import Image
 
 from multiclass_semantic_segmentation import constants
 from multiclass_semantic_segmentation.classes import Config
@@ -155,3 +156,28 @@ def get_model(config: Config, input_shape) -> tf.keras.Model:
             n_classes=config.n_classes,
             input_sz=input_shape,
         )
+
+
+def _load_img(filepath_list):
+    images = []
+    for i, image_path in enumerate(filepath_list):
+        image = np.array(Image.open(image_path))
+        images.append(image)
+
+    return np.array(images)
+
+
+def imageLoader(img_list, mask_list, batch_size):
+    all_files = len(img_list)
+
+    while True:
+        batch_start = 0
+        batch_end = batch_size
+
+        while batch_start < all_files:
+            limit = min(batch_end, all_files)
+            x = _load_img(img_list[batch_start:limit])
+            y = _load_img(mask_list[batch_start:limit])
+            yield (np.expand_dims(x, axis=3), np.expand_dims(y, axis=3))
+            batch_start += batch_size
+            batch_end += batch_size
